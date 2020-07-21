@@ -28,7 +28,7 @@ def recordAudio():
 
     #Open the microphone and start recording
     with sr.Microphone() as source:
-        print('Say something!')
+        print('Dit quelques choses!')
         audio = r.listen(source)
 
     #Use Googles speech recognition
@@ -48,7 +48,7 @@ def assistantResponse(text):
     print(text)
 
     #convert the text to speech
-    myobj = gTTS(text=text, lang='en', slow=False)
+    myobj = gTTS(text=text, lang='fr-FR', slow=False)
 
     #save the converted audio to a file
     myobj.save('assistant_response.mp3')
@@ -59,7 +59,7 @@ def assistantResponse(text):
 
 #A function for wake words or phrase
 def wakeWord(text):
-    WAKE_WORDS = ['hey mia', 'okay mia', 'hi mia', 'hello mia']
+    WAKE_WORDS = ['bonjour ava', 'okay ava', 'salut ava']
     text = text.lower()
 
     #Check to see if the users command/text contains a wake word/phrase
@@ -79,21 +79,16 @@ def getDate():
     monthName  = calendar.month_name[now.weekday()]
     yearNum = now.year
 
-
-    ordinal_number = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th', '14th', '15th', '16th', '17th', '18th', '19th', '20th',
-                      '21st', '22nd', '23rd', '24th', '25th', '26th', '27th', '28th', '29th', '30th', '31st']
-
-
-    return 'Today is ' + weekday + ' ' + monthName + ' ' + ordinal_number[dayNum - 1] + ' ' + str(yearNum) + '.'
+    return 'Aujourd\'hui nous sommes le'  + dayNum + ' ' + weekday + ' ' + monthName + ' ' + str(yearNum) + '.'
 
 
 #A function to return a radom greeting response
 def greeting(text):
     #Greeting inputs
-    GREETING_INPUTS = ['hi', 'hello', 'whatsup', 'hey']
+    GREETING_INPUTS = ['salut', 'bonjour']
 
     # Greeting response
-    GREETING_RESPONSES = ['hello celia', 'hi celia']
+    GREETING_RESPONSES = ['Bonjour celia', 'Salut celia']
 
     #If the users input is a greeting, then return a randomlu chosen greeting response
     for word in text.split():
@@ -108,7 +103,7 @@ def getPerson(text):
     wordList = text.split() #splitting the text into a list of words
 
     for i in range(0, len(wordList)):
-        if i+3 <= len(wordList) - 1 and wordList[i].lower() == 'who' and wordList[i+1].lower() == 'is':
+        if i+3 <= len(wordList) - 1 and wordList[i].lower() == 'qui' and wordList[i+1].lower() == 'est':
             return wordList[i+2] + ' ' + wordList[i+3]
 
 
@@ -125,28 +120,17 @@ while True:
         response = response + greeting(text)
 
         #Check to see if the user said anything having to do with the date
-        if('date' in text):
+        if('jour' in text):
             get_date = getDate()
             response = response + ' ' + get_date
 
-        if('time' in text):
+        if('heure' in text):
             now = datetime.datetime.now()
-            meridiem =''
-            if now.hour >= 12:
-                meridiem = 'p.m'
-                hour = now.hour - 12
-            else:
-                meridiem = 'a.m'
-                hour = now.hour
 
-            if now.minute < 10:
-                minute = '0'+str(now.minute)
-            else: minute = str(now.minute)
-
-            response = response + ' ' + 'It is ' + str(hour) + ':' + minute + ' '+meridiem+'.'
+            response = response + ' ' + 'il est' + str(hour) + ':' + minute + ' '+meridiem+'.'
 
         #Check to see if the user say 'who is'
-        if('who is' in text):
+        if('qui est' in text):
             person = getPerson(text)
             wiki = wikipedia.summary(person, sentences=2)
             response = response + ' ' + wiki
